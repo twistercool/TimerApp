@@ -24,6 +24,7 @@
 
     <Button
         android:id="@+id/edit_timer"
+        android:text="@string/edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/remaining_time"
@@ -35,6 +36,7 @@
 
     <Button
         android:id="@+id/start_timer"
+        android:text="@string/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
