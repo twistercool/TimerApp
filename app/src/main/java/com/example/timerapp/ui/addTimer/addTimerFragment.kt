@@ -48,6 +48,22 @@ class addTimerFragment: Fragment() {
             view.findNavController().navigate(R.id.overview_fragment)
         }
 
+        saveButton.setOnClickListener { view ->
+            val bundle: Bundle = Bundle()
+            bundle.putLong("totalSeconds", sliderMins.progress.toLong() * 60 + sliderSecs.progress.toLong())
+//            println("dab")
+            println(newLabel.text.toString())
+//            bundle.putString("label", newLabel.text.toString())
+            if (newLabel.text.toString() == "") {
+                bundle.putString("label", "New Timer")
+            }
+            else {
+                bundle.putString("label", newLabel.text.toString())
+            }
+            view.findNavController().navigate(R.id.overview_fragment, bundle)
+        }
+
+        //updates the viewmodel when the slider changes
         sliderMins.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 addTimerViewModel.minutes.value = progress.toLong()
@@ -62,6 +78,7 @@ class addTimerFragment: Fragment() {
             }
         })
 
+        //updates the viewmodel when the slider changes
         sliderSecs.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 addTimerViewModel.seconds.value = progress.toLong()

@@ -6,11 +6,13 @@ import com.example.timerapp.model.Timer
 import java.lang.Exception
 
 class OverviewViewModel: ViewModel() {
-    lateinit var timerList: MutableLiveData<MutableList<Timer>>
+    var timerList: MutableLiveData<MutableList<Timer>> = MutableLiveData(MutableList(0) { index -> Timer("",0)})
 
     init {
+
         //initialise it for testing
-        timerList = MutableLiveData(MutableList(5) {index -> Timer("New Timer", 60)})
+        println("init overvireviewmodel")
+//        timerList = MutableLiveData(MutableList(0) { index -> Timer("",0)})
     }
 
     //default timer is set to

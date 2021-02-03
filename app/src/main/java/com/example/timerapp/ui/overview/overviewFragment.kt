@@ -11,18 +11,29 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.timerapp.R
 import com.example.timerapp.model.Timer
 
 class overviewFragment: Fragment() {
+//    private lateinit var overviewViewModel: OverviewViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val overviewViewModel = ViewModelProvider(this).get(OverviewViewModel::class.java)
+        val overviewViewModel: OverviewViewModel by activityViewModels()
         val root = inflater.inflate(R.layout.overview_list_view, container, false)
         val timerListView: ListView = root.findViewById(R.id.list_view_timers)
+
+
+        if (arguments?.getString("label") != null)
+        {
+            requireArguments().getString("label")?.let { overviewViewModel.addTimer(it, requireArguments().getLong("totalSeconds")) }
+        }
+
 
         val timersObserver = Observer<MutableList<Timer>>{ liveTimers ->
             //let and it get the context of the fragment

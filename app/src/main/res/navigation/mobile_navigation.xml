@@ -9,7 +9,9 @@
     <fragment
         android:id="@+id/overview_fragment"
         android:name="com.example.timerapp.ui.overview.overviewFragment"
-        tools:layout="@layout/overview_list_view" />
+        tools:layout="@layout/overview_list_view">
+        <argument android:name="label" app:argType="string"/>
+        <argument android:name="totalSeconds" app:argType="long"/></fragment>
 
     <fragment
         android:id="@+id/add_timer_fragment"
