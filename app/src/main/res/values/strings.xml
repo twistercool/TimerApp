@@ -3,4 +3,8 @@
     <string name="edit">Edit</string>
     <string name="start">Start</string>
     <string name="new_timer">New Timer</string>
+    <string name="pause">Pause</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

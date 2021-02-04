@@ -9,20 +9,7 @@ class OverviewViewModel: ViewModel() {
     var timerList: MutableLiveData<MutableList<Timer>> = MutableLiveData(MutableList(0) { index -> Timer("",0)})
 
     init {
-
-        //initialise it for testing
-        println("init overvireviewmodel")
-//        timerList = MutableLiveData(MutableList(0) { index -> Timer("",0)})
-    }
-
-    //default timer is set to
-    fun addTimer() {
-        try {
-            timerList.value?.add(Timer("New Timer", 60))
-        }
-        catch (e: Exception) {
-            println("timerList not initialised")
-        }
+        println("init OverviewViewModel")
     }
 
     fun addTimer(label: String, seconds: Long) {

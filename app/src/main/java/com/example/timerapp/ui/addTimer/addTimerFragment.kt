@@ -15,11 +15,11 @@ import androidx.navigation.findNavController
 import com.example.timerapp.R
 import com.google.android.material.textfield.TextInputEditText
 
-class addTimerFragment: Fragment() {
+class AddTimerFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val addTimerViewModel = ViewModelProvider(this).get(addTimerViewModel::class.java)
+        val addTimerViewModel = ViewModelProvider(this).get(AddTimerViewModel::class.java)
         val root = inflater.inflate(R.layout.add_timer, container, false)
 
         val timerTime: TextView = root.findViewById(R.id.timer_time)
@@ -49,11 +49,9 @@ class addTimerFragment: Fragment() {
         }
 
         saveButton.setOnClickListener { view ->
-            val bundle: Bundle = Bundle()
+            val bundle = Bundle()
             bundle.putLong("totalSeconds", sliderMins.progress.toLong() * 60 + sliderSecs.progress.toLong())
-//            println("dab")
-            println(newLabel.text.toString())
-//            bundle.putString("label", newLabel.text.toString())
+//            println(newLabel.text.toString())
             if (newLabel.text.toString() == "") {
                 bundle.putString("label", "New Timer")
             }

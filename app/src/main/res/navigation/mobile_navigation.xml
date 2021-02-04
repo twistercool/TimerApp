@@ -8,14 +8,20 @@
 
     <fragment
         android:id="@+id/overview_fragment"
-        android:name="com.example.timerapp.ui.overview.overviewFragment"
+        android:name="com.example.timerapp.ui.overview.OverviewFragment"
         tools:layout="@layout/overview_list_view">
         <argument android:name="label" app:argType="string"/>
         <argument android:name="totalSeconds" app:argType="long"/></fragment>
 
     <fragment
         android:id="@+id/add_timer_fragment"
-        android:name="com.example.timerapp.ui.addTimer.addTimerFragment"
+        android:name="com.example.timerapp.ui.addTimer.AddTimerFragment"
         tools:layout="@layout/add_timer" />
+
+    <fragment
+        android:id="@+id/start_timer_fragment"
+        android:name="com.example.timerapp.ui.startTimer.StartTimerFragment"
+        tools:layout="@layout/start_timer" >
+    <argument android:name="position" app:argType="integer" /></fragment>
 
 </navigation>
