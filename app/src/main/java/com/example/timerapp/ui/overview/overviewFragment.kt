@@ -27,12 +27,28 @@ class OverviewFragment: Fragment() {
         val root = inflater.inflate(R.layout.overview_list_view, container, false)
         val timerListView: ListView = root.findViewById(R.id.list_view_timers)
 
-        //if the fragment has been created with arguments, it means that
-        //addTimerFragment sends a bundle with a new timer, and should therefore be added
-        if (arguments?.getString("label") != null)
-        {
-            requireArguments().getString("label")?.let { overviewViewModel.addTimer(it, requireArguments().getLong("totalSeconds")) }
+        val deleteArg =  arguments?.getInt("timerToDelete")
+        if (deleteArg != -1 && deleteArg != null) {
+            overviewViewModel.deleteTimer(deleteArg)
         }
+
+        val timerToUpdate =  arguments?.getInt("timerToEdit")
+        println("$timerToUpdate")
+        if (timerToUpdate != -1 && timerToUpdate != null) {
+            val newLabel = arguments?.getString("label")
+            val newTime = arguments?.getLong("totalSeconds")
+            if (newLabel != null && newTime != null) {
+                overviewViewModel.updateTimer(timerToUpdate, newLabel, newTime)
+            }
+        }
+        else {
+            //if the fragment has been created with arguments, it means that
+            //addTimerFragment sends a bundle with a new timer, and should therefore be added
+            if (arguments?.getString("label") != null) {
+                requireArguments().getString("label")?.let { overviewViewModel.addTimer(it, requireArguments().getLong("totalSeconds")) }
+            }
+        }
+
 
 
         val timersObserver = Observer<MutableList<Timer>>{ liveTimers ->
@@ -73,6 +89,14 @@ class TimerListAdapter(context: Context, Id: Int, timers: MutableList<Timer>): A
             remainingTimeView.text = "00:00"
         }
         labelView.text = localTimers[position].name
+
+        editButton.setOnClickListener { view ->
+            val bundle = Bundle()
+            bundle.putInt("position", position)
+            localTimers[position].remainingTime.value?.let { bundle.putLong("remainingTime", it) }
+            bundle.putString("label", localTimers[position].name)
+            view.findNavController().navigate(R.id.edit_timer_fragment, bundle)
+        }
 
         startButton.setOnClickListener { view ->
             val bundle = Bundle()

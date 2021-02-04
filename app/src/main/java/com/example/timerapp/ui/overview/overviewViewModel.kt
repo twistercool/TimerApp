@@ -21,6 +21,24 @@ class OverviewViewModel: ViewModel() {
         }
     }
 
+    fun updateTimer(position: Int, newLabel: String, seconds: Long) {
+        try {
+            timerList.value?.set(position, Timer(newLabel, seconds))
+        }
+        catch (e: Exception) {
+            println("timerList not initialised")
+        }
+    }
+
+    fun deleteTimer(position: Int) {
+        try {
+            timerList.value?.removeAt(position)
+        }
+        catch (e: Exception) {
+            println("timerList not initialised")
+        }
+    }
+
     fun startTimer(index: Int) {
         try {
             timerList.value?.get(index)?.startTimer()

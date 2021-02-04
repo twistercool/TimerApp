@@ -7,4 +7,6 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="edit_timer">Edit Timer</string>
+    <string name="delete">Delete</string>
 </resources>
