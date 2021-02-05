@@ -35,8 +35,6 @@ class EditTimerFragment: Fragment() {
         if (originalTime != null) {
             editTimerViewModel.minutes.value = originalTime.toLong() / 60
             editTimerViewModel.seconds.value = originalTime.toLong() % 60
-
-//            timerTime.text = "${originalTime/60}:${originalTime%60}"
             sliderMins.progress = originalTime / 60
             sliderSecs.progress = originalTime % 60
         }
@@ -57,6 +55,7 @@ class EditTimerFragment: Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 editTimerViewModel.seconds.value = progress.toLong()
             }
+            //we have to implement the interface and therefore those two functions have to be there
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
@@ -83,6 +82,7 @@ class EditTimerFragment: Fragment() {
         saveButton.setOnClickListener { view ->
             val bundle = Bundle()
             arguments?.getInt("position")?.let { bundle.putInt("timerToEdit", it) }
+            //puts the total seconds in the bundle
             editTimerViewModel.minutes.value?.times(60)?.plus(editTimerViewModel.seconds.value!!)?.let { bundle.putLong("totalSeconds", it) }
             if (newLabel.text.toString() == "") {
                 bundle.putString("label", originalLabel)

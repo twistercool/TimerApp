@@ -8,7 +8,7 @@ class Timer(label: String, seconds: Long) {
     val name = label
     val globalTime = seconds
     val remainingTime: MutableLiveData<Long> = MutableLiveData() //in seconds
-    lateinit var timer: CountDownTimer
+    private lateinit var timer: CountDownTimer
     var isPaused = true
 
     init {
@@ -26,7 +26,7 @@ class Timer(label: String, seconds: Long) {
 
                 override fun onFinish() {
                     remainingTime.value = 0
-                    println("${name} is done!")
+                    println("$name is done!")
                 }
             }.start()
         }

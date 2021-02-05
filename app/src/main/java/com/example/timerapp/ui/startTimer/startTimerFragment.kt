@@ -12,16 +12,19 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.timerapp.R
-import com.example.timerapp.model.Timer
 import com.example.timerapp.ui.overview.OverviewViewModel
 
 class StartTimerFragment: Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //I could have written a separate viewmodel that receives data from a bundle
+        //and sends information to the overview using the same technique, but I feel like it is simpler
+        //to simply fetch the timer directly.
+        //I can refactor it if it isn't the way to go
         val overviewViewModel: OverviewViewModel by activityViewModels()
         val root = inflater.inflate(R.layout.start_timer, container, false)
 
-        val position = arguments?.getInt("position")
+        val position = arguments?.getInt("position")!!
 
         val timerTextView = root.findViewById<TextView>(R.id.current_timer)
         val originalTimerTextView = root.findViewById<TextView>(R.id.start_timer)
@@ -29,45 +32,49 @@ class StartTimerFragment: Fragment() {
         val doneButton = root.findViewById<Button>(R.id.done_button)
 
         //shows the remaining time of the timer
-        val timer = position?.let { overviewViewModel.timerList.value?.get(it) }
         val labelObserver = Observer<Long>{ liveTime ->
-            timerTextView.text = "${liveTime/60}:${liveTime%60}"
+            val remainingMinutesText = if (liveTime / 60 < 10) "0${liveTime/60}" else "${liveTime/60}"
+            val remainingSecondsText = if (liveTime % 60 < 10) "0${liveTime%60}" else "${liveTime%60}"
+            timerTextView.text = "$remainingMinutesText:$remainingSecondsText"
             if (liveTime.toInt() == 0) {
-                if (position != null) {
-                    overviewViewModel.timerList.value?.removeAt(position)
-                }
                 root.findNavController().navigate(R.id.overview_fragment)
             }
         }
-        timer?.remainingTime?.observe(viewLifecycleOwner, labelObserver)
+        overviewViewModel.getRemainingTime(position)?.observe(viewLifecycleOwner, labelObserver)
 
-        //shows the original time when the timer was created
-        val originalTime = position?.let { overviewViewModel.timerList.value?.get(it)?.globalTime }
+        //shows the original time when the timer was create
+        val originalTime = overviewViewModel.getOriginalTime(position)
         if (originalTime != null) {
-            originalTimerTextView.text = "${originalTime/60}:${originalTime%60}"
+            val originalMinutes = if (originalTime / 60 < 10) "0${originalTime/60}" else "${originalTime/60}"
+            val originalSeconds = if (originalTime % 60 < 10) "0${originalTime%60}" else "${originalTime%60}"
+            originalTimerTextView.text = "$originalMinutes:$originalSeconds"
         }
 
-        startOrPauseButton.setOnClickListener { view ->
-            if (position?.let { overviewViewModel.timerList.value?.get(it)?.isPaused} == true) {
-                overviewViewModel.timerList.value?.get(position.toInt())?.startTimer()
-                startOrPauseButton.text = "Pause"
-            }
-            else if (position?.let { overviewViewModel.timerList.value?.get(it)?.isPaused} == false) {
-                overviewViewModel.timerList.value?.get(position.toInt())?.stopTimer()
-                startOrPauseButton.text = "Start"
+        //manages the logic of pausing and starting the timer
+        startOrPauseButton.setOnClickListener { _ ->
+            when (overviewViewModel.isTimerPaused(position)) {
+                true -> {
+                    overviewViewModel.startTimer(position)
+                    startOrPauseButton.text = "Pause"
+                }
+                false -> {
+                    overviewViewModel.stopTimer(position)
+                    startOrPauseButton.text = "Continue"
+                }
+                else -> {
+                    println("can't access the timer")
+                }
             }
         }
 
+        //stops the timer before navigating ti the overview
         doneButton.setOnClickListener { view ->
-            if (position != null) {
-                overviewViewModel.timerList.value?.get(position)?.stopTimer()
-            }
+            overviewViewModel.stopTimer(position)
             view.findNavController().navigate(R.id.overview_fragment)
         }
 
-        if (position != null) {
-            overviewViewModel.timerList.value?.get(position)?.startTimer()
-        }
+        //starts with running the timer
+        overviewViewModel.startTimer(position)
 
         return root
     }

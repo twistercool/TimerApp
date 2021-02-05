@@ -27,13 +27,16 @@ class OverviewFragment: Fragment() {
         val root = inflater.inflate(R.layout.overview_list_view, container, false)
         val timerListView: ListView = root.findViewById(R.id.list_view_timers)
 
-        val deleteArg =  arguments?.getInt("timerToDelete")
-        if (deleteArg != -1 && deleteArg != null) {
-            overviewViewModel.deleteTimer(deleteArg)
+        //the default value of the argument is -1, so if the fragment is opened
+        //normally, it won't delete anything
+        val timerToDelete =  arguments?.getInt("timerToDelete")
+        if (timerToDelete != -1 && timerToDelete != null) {
+            overviewViewModel.deleteTimer(timerToDelete)
         }
 
+        //it also can receive information to update a timer. When it does,
+        //it looks for a new label and time, and will change it in the list
         val timerToUpdate =  arguments?.getInt("timerToEdit")
-        println("$timerToUpdate")
         if (timerToUpdate != -1 && timerToUpdate != null) {
             val newLabel = arguments?.getString("label")
             val newTime = arguments?.getLong("totalSeconds")
@@ -42,23 +45,25 @@ class OverviewFragment: Fragment() {
             }
         }
         else {
-            //if the fragment has been created with arguments, it means that
-            //addTimerFragment sends a bundle with a new timer, and should therefore be added
+            //it can also be called without a timer to update, it will simply
+            //create a new timer
             if (arguments?.getString("label") != null) {
-                requireArguments().getString("label")?.let { overviewViewModel.addTimer(it, requireArguments().getLong("totalSeconds")) }
+                val newLabel = arguments?.getString("label")
+                val newTime = arguments?.getLong("totalSeconds")
+                if (newLabel != null && newTime != null) {
+                    overviewViewModel.addTimer(newLabel, newTime)
+                }
             }
         }
 
-
-
+        //the observer updates the list of timers (the adapter) when changes occur
         val timersObserver = Observer<MutableList<Timer>>{ liveTimers ->
-            //let and it get the context of the fragment
             val timersAdapter = activity?.let { TimerListAdapter(it, R.layout.timer_list_item, liveTimers) }
             timerListView.adapter = timersAdapter
         }
-        overviewViewModel.timerList.observe(viewLifecycleOwner, timersObserver)
+        overviewViewModel.getTimers().observe(viewLifecycleOwner, timersObserver)
 
-
+        //navigates to the add timer screen when the button is pressed
         val addTimerButton: Button = root.findViewById(R.id.add_timer_button)
         addTimerButton.setOnClickListener { view ->
             view.findNavController().navigate(R.id.add_timer_fragment)
@@ -68,6 +73,7 @@ class OverviewFragment: Fragment() {
     }
 }
 
+//this adapter manages the display of each element of the list
 class TimerListAdapter(context: Context, Id: Int, timers: MutableList<Timer>): ArrayAdapter<Timer>(context, Id, timers) {
     private val localTimers = timers
 
@@ -76,6 +82,7 @@ class TimerListAdapter(context: Context, Id: Int, timers: MutableList<Timer>): A
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView = inflater.inflate(R.layout.timer_list_item, parent, false)
 
+        //gets all the necessary elements to update
         val remainingTimeView = rowView.findViewById<TextView>(R.id.remaining_time)
         val labelView = rowView.findViewById<TextView>(R.id.label)
         val editButton = rowView.findViewById<Button>(R.id.edit_timer_button)
@@ -83,7 +90,9 @@ class TimerListAdapter(context: Context, Id: Int, timers: MutableList<Timer>): A
 
         val localRemainingTime = localTimers[position].remainingTime.value
         if (localRemainingTime != null) {
-            remainingTimeView.text = "${localRemainingTime / 60}:${localRemainingTime % 60}"
+            val remainingMinutesText = if (localRemainingTime / 60 < 10) "0${localRemainingTime/60}" else "${localRemainingTime/60}"
+            val remainingSecondsText = if (localRemainingTime % 60 < 10) "0${localRemainingTime%60}" else "${localRemainingTime%60}"
+            remainingTimeView.text = "$remainingMinutesText:$remainingSecondsText"
         }
         else {
             remainingTimeView.text = "00:00"
