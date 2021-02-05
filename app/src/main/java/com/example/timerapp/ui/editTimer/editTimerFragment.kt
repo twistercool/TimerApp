@@ -1,10 +1,12 @@
 package com.example.timerapp.ui.editTimer
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
@@ -40,12 +42,18 @@ class EditTimerFragment: Fragment() {
         }
 
         val secObserver = Observer<Long>{ newSeconds ->
-            timerTime.text = "${editTimerViewModel.minutes.value}:$newSeconds"
+            val minutes = editTimerViewModel.minutes.value!!
+            val minutesText = if (minutes < 10) "0$minutes" else "$minutes"
+            val secondsText = if (newSeconds < 10) "0$newSeconds" else "$newSeconds"
+            timerTime.text = "$minutesText:$secondsText"
         }
         editTimerViewModel.seconds.observe(viewLifecycleOwner, secObserver)
 
         val minObserver = Observer<Long>{ newMinutes ->
-            timerTime.text = "${newMinutes}:${editTimerViewModel.seconds.value}"
+            val seconds = editTimerViewModel.seconds.value!!
+            val minutesText = if (newMinutes < 10) "0$newMinutes" else "$newMinutes"
+            val secondsText = if (seconds < 10) "0$seconds" else "$seconds"
+            timerTime.text = "$minutesText:$secondsText"
         }
         editTimerViewModel.minutes.observe(viewLifecycleOwner, minObserver)
 
@@ -69,17 +77,26 @@ class EditTimerFragment: Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        //helper function that closes the keyboard automatically
+        fun View.hideKeyboard() {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(windowToken, 0)
+        }
+
         deleteButton.setOnClickListener { view ->
+            view.hideKeyboard()
             val bundle = Bundle()
             arguments?.getInt("position")?.let { bundle.putInt("timerToDelete", it) }
             view.findNavController().navigate(R.id.overview_fragment, bundle)
         }
 
         cancelButton.setOnClickListener { view ->
+            view.hideKeyboard()
             view.findNavController().navigate(R.id.overview_fragment)
         }
 
         saveButton.setOnClickListener { view ->
+            view.hideKeyboard()
             val bundle = Bundle()
             arguments?.getInt("position")?.let { bundle.putInt("timerToEdit", it) }
             //puts the total seconds in the bundle

@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <TextView
         android:id="@+id/edit_timer_label"
@@ -11,24 +12,29 @@
         android:layout_height="wrap_content"
         android:text="@string/edit_timer"
         android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/timer_time_edit_screen"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
         android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="80sp"
+        android:fontFamily="sans-serif"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.192" />
+        app:layout_constraintVertical_bias="0.15" />
 
     <SeekBar
         android:id="@+id/edit_minute_slider"
@@ -41,7 +47,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.426" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <SeekBar
         android:id="@+id/edit_seconds_slider"
@@ -54,53 +60,61 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.571" />
+        app:layout_constraintVertical_bias="0.54" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/input_label_edit"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_width="380dp"
+        android:layout_height="70dp"
+        android:textColorHint="@color/grey"
+        android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.66" />
 
     <Button
         android:id="@+id/delete_button"
-        android:layout_width="125dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:text="@string/delete"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/magenta"
+        android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/save_edit_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.806" />
+        app:layout_constraintVertical_bias="0.995" />
 
     <Button
         android:id="@+id/cancel_button_edit"
-        android:layout_width="125dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintHorizontal_bias="0.24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.897" />
+        app:layout_constraintVertical_bias="0.98" />
 
     <Button
         android:id="@+id/save_edit_button"
         android:layout_width="125dp"
         android:layout_height="50dp"
         android:text="@string/save"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.765"
+        app:layout_constraintHorizontal_bias="0.76"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.897" />
+        app:layout_constraintVertical_bias="0.98" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
